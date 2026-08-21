@@ -22,8 +22,8 @@ async function registerUser(req, res) {
 
     const ifuserexist = await userModel.findOne({
         $or: [
-            { userName },
-            { email }
+            { userName: userName },
+            { email: email }
         ]
     })
 
@@ -41,8 +41,8 @@ async function registerUser(req, res) {
         const hash = await bcrypt.hash(password, 10)
 
         const user = await userModel.create({
-            userName,
-            email,
+            userName: userName,
+            email: email,
             password: hash
         })
 
@@ -120,7 +120,7 @@ async function loginUser(req, res) {
 
 /**  
  * @name logoutUserController
- * @description logout a user, usrname,email and password in request
+ * @description logout a user, username,email and password in request
  * @access public
 */
 async function logoutUser(req, res) {

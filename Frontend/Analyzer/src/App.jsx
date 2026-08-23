@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router'
 import './App.css'
 import { router } from "./app.routes.jsx"
-import { AuthProvider } from './features/auth/auth.context.jsx'
+import { AuthProvider } from './features/auth/auth.provider.jsx'
 
 function App() {
 

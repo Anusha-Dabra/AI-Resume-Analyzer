@@ -2,7 +2,7 @@ const express = require("express")
 const { userModel } = require("../Model/user.model")
 const JWT = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
-const { tokenBlackListModel } = require("../Model/blacklist.model")
+const tokenBlackListModel = require("../Model/blacklist.model")
 
 /**
  * @name registerUserController
@@ -50,20 +50,24 @@ async function registerUser(req, res) {
             id: user._id      //one attribute must be unique, to uniquely identify the user 
         }, process.env.JWT_SECRET)
 
-        res.cookie("token", token)
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         res.status(201).json({
             message: "User registered successfully",
             user: {
                 userName: user.userName,
-                password: user.password,
                 email: user.email,
             }
         })
 
     } catch (error) {
         console.log("error while registering user:", error)
-
+        return res.status(500).json({ message: "Internal server error" })
     }
 }
 
@@ -84,7 +88,7 @@ async function loginUser(req, res) {
 
     if (!user) {
         console.log("User not found");
-        return res.send(409).json({
+        return res.status(409).json({
             message: "User not found"
         })
     }
@@ -102,7 +106,12 @@ async function loginUser(req, res) {
             id: user._id
         }, process.env.JWT_SECRET)
 
-        res.cookie("token", token)
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         res.status(200).json({
             message: "User logged in successfully",
@@ -115,38 +124,47 @@ async function loginUser(req, res) {
 
     } catch (error) {
         console.error("Error: ", error);
+        return res.status(500).json({ message: "Internal server error" })
     }
 }
 
 /**  
  * @name logoutUserController
- * @description logout a user, username,email and password in request
+ * @description logout a user
  * @access public
 */
 async function logoutUser(req, res) {
-    const token = req.cookies.token
+    const token = req.cookies?.token
 
     try {
-        if (!token) {
-            return res.status(400).json({
-                message: "Token not found"
-            })
+        if (token) {
+            try {
+                await tokenBlackListModel.create({ token })
+            } catch (blacklistErr) {
+                console.error("Token blacklist record error (proceeding with logout):", blacklistErr)
+            }
         }
 
-        await tokenBlackListModel.create({
-            token
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/"
         })
 
-        res.clearCookie("token")
-        res.status(200).json({
-            message: "User logged out successfully",
-            token: token
+        return res.status(200).json({
+            message: "User logged out successfully"
+        })
+    } catch (error) {
+        console.error("Error during logout:", error)
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/"
+        })
+        return res.status(200).json({
+            message: "User logged out successfully"
         })
     }
-    catch (error) {
-        console.error("Error: ", error);
-    }
-
 }
 
 

@@ -47,15 +47,13 @@ export const useAuth = () => {
     const handleLogout = async () => {
         setLoading(true)
         try {
-            const data = await logout()
-            setUser(null) // 
+            await logout()
         }
         catch (error) {
-            console.error("Error: ", error)
-
-            throw error
+            console.error("Server logout notice (clearing local session anyway):", error)
         }
         finally {
+            setUser(null)
             setLoading(false)
         }
     }

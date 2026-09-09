@@ -3,9 +3,9 @@ import Login from "./features/auth/pages/login"
 import Logout from "./features/auth/pages/logout"
 import Register from "./features/auth/pages/register"
 import Protected from "./features/auth/component/protected"
-
-
-
+import Home from "./features/interview/pages/home"
+import Interview from "./features/interview/pages/interview"
+import Profile from "./features/auth/pages/profile"
 
 export const router = createBrowserRouter([
 
@@ -22,8 +22,16 @@ export const router = createBrowserRouter([
         element: <Logout />,
     },
     {
+        path: "/profile",
+        element: <Protected> <Profile /></Protected>
+    },
+    {
         path: "/",
-        element: <Protected> <h1>This is a home page</h1></Protected>
+        element: <Protected> <Home /></Protected>
+    },
+    {
+        path: "/interview/:id",
+        element: <Protected> <Interview /></Protected>
     }
 
 

@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useauth"
+import { useAuth } from "../hooks/useAuth"
 import { Navigate } from "react-router"
 
 const Protected = ({ children }) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link, useLocation, useNavigate } from 'react-router'
-import { useAuth } from '../../auth/hooks/useauth'
+import { useAuth } from '../../auth/hooks/useAuth'
 import { getInterviewReportByIdApi } from '../services/interview.api'
 import { exportReportToPDF } from '../utils/pdfGenerator'
 import { useInterview } from '../hooks/useInterview'

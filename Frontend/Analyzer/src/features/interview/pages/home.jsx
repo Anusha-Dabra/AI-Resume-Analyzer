@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router'
-import { useAuth } from '../../auth/hooks/useauth'
+import { useAuth } from '../../auth/hooks/useAuth'
 // import { generateInterviewReportApi } from '../services/interview.api.js'
 import { useInterview } from "../hooks/useInterview.js"
 import ReportHistory from '../components/ReportHistory.jsx'

@@ -1,15 +1,14 @@
-const app = require("./src/app")
-const connectDB = require("./src/config/db")
+const app = require("./src/app");
+const connectDB = require("./src/config/db");
 
-
-
-
-connectDB()
+connectDB();
 
 app.get("/", (req, res) => {
     res.send("AI Resume Analyzer Backend is running");
 });
 
-app.listen(3000, () => {
-    console.log("server started");
-})
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server started on port ${PORT}`);
+});

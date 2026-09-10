@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import TextField from '@mui/material/TextField'
-import { useAuth } from '../hooks/useauth'
+import { useAuth } from '../hooks/useAuth'
 import './logout.css'
 
 const textFieldStyles = {
